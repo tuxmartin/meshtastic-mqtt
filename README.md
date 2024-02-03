@@ -1,27 +1,47 @@
-# Note: only functions with old v1.2 meshtastic device firmware
-The newer version 2 of the device firmware supports JSON MQTT packets natively, so there is no need for this script.
+# Instalace
+
+```bash
+pip install -r requirements.txt
+```
+
+# Spusteni
+```bash
+PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python python meshtastic_mqtt/meshtastic_mqtt.py
+```
+
+# Ukazka
+
+Jedno ESP32 (program v Arduino) ma pripojeny DS18B20 teplomer a do serioveho portu posila string:
+```
+ID=28070D46920502BA_T=25.00C
+```
+je to id teplomeru a namerena teplota. Pres seriovy port je pripojeny [Wireless Stick Lite(V3)](https://heltec.org/project/wireless-stick-lite-v2/) s nahranym Meshtastic firmwarem.
+
+Vystup app:
+
+![output](output.png)
+
+Hardware:
+
+![hardware](hardware.jpg)
+
+Nastaveni Serial (node bez WiFi):
+
+![meshtastic_serial](meshtastic_serial.jpg)
+
+cisla pinu seriaku jsou podle:
+
+![HTIT-WSL_V3](https://heltec.org/wp-content/uploads/2023/09/HTIT-WSL_V3.png)
+
+**Kanal s cislem 0 se pouzije pro odesilani dat ze serioveho portu**:
+
+![meshtastic_kanal](meshtastic_kanal.jpg)
+
+Nastaveni MQTT v Meshtastic node (node s WiFi), **`encryption` musi byt vypnute**:
+
+![meshtastic_mqtt](meshtastic_mqtt.jpg)
 
 
-# meshtastic-mqtt
-A python script to translate Meshtastic MQTT location messages into a plain format that other systems can easily understand.  Currently takes position data and submits it to a Traccar instance, also publishes user info packets, battery levels and environmental plugin temperatures and humidity readings to mqtt as raw values.
+## TO DO
 
-The latest build of Meshtastic-device has support for publishing decrypted payloads, which you'll need in order to use this script.
-
-There's a few config definitions at the top of meshtastic-mqtt.py that you'll need to change for your MQTT server.
-
-# Installation
-
-Clone the repo
-`git clone https://github.com/joshpirihi/meshtastic-mqtt`
-`cd meshtastic-mqtt`
-
-Edit the main script and enter your broker and/or traccar host details
-`nano meshtastic_mqtt/meshtastic_mqtt.py`
-
-Install to your systen with pip
-`pip install .`
-
-Run
-`meshtastic-mqtt`
-
-There are some comments in meshtastic-mqtt.py that detail the tweaks needed to make this run under AppDaemon in Home Assistant.
+Pridat podporu desifrovani zprav.
